@@ -1,6 +1,5 @@
 ---
 - name: configure webserver
-  hosts: intranet
   become: true
   tasks:
 
