@@ -1,0 +1,52 @@
+---
+- name: configure webserver
+  hosts: intranet
+  become: true
+  tasks:
+
+  - name: Ensure installed package httpd and firewalld
+    ansible.builtin.dnf:
+      name: "{{ item }}"
+    loop:
+      - httpd
+      - firewalld
+
+  - name: Asegúrese de que se habilite y se inicie el servicio firewalld
+    ansible.builtin.service:
+      name: firewalld
+      state: started
+      enabled: true
+
+  - name: permanently enable http service, also enable it immediately if possible
+    ansible.posix.firewalld:
+      service: http
+      state: enabled
+      permanent: true
+      immediate: true
+
+
+  - name: Asegúrese de que se habilite y se inicie el servicio httpd
+    ansible.builtin.service:
+      name: httpd
+      state: started
+      enabled: true
+
+
+  - name: Asegurarse del contenido web
+    ansible.builtin.copy:
+      dest: /var/www/html/index.html
+      content: "Welcome to the example.com intranet!\n"
+
+- name: Validar configuracion
+  hosts: localhost
+  remote_user: student
+  tasks:
+
+  - name: Validar conexion http
+    ansible.builtin.uri:
+      url: "{{ item }}"
+      status_code: 200
+    loop:
+      - http://student-0-server-c/index.html
+      - http://student-0-server-c/index.html
+...
