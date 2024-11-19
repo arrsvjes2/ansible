@@ -28,17 +28,4 @@
     ansible.builtin.copy:
       dest: /var/www/html/index.html
       content: "Welcome to the example.com intranet!\n"
-
-- name: Validar configuracion
-  hosts: localhost
-  remote_user: student
-  tasks:
-
-  - name: Validar conexion http
-    ansible.builtin.uri:
-      url: "{{ item }}"
-      status_code: 200
-    loop:
-      - http://student-0-server-c/index.html
-      - http://student-0-server-c/index.html
 ...
