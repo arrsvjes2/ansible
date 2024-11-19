@@ -17,14 +17,6 @@
       state: started
       enabled: true
 
-  - name: permanently enable http service, also enable it immediately if possible
-    ansible.posix.firewalld:
-      service: http
-      state: enabled
-      permanent: true
-      immediate: true
-
-
   - name: Asegúrese de que se habilite y se inicie el servicio httpd
     ansible.builtin.service:
       name: httpd
